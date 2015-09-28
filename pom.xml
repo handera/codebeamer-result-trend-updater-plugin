@@ -32,7 +32,7 @@
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Codebeamer+Result+Trend+Updater+Plugin</url>
 
   <scm>
-    <connection>scm:git:ssh://github.com/jenkinsci/codebeamer-result-trend-updater-plugin.git</connection>
+    <connection>scm:git:https://github.com/jenkinsci/codebeamer-result-trend-updater-plugin.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/jenkinsci/codebeamer-result-trend-updater-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/codebeamer-result-trend-updater-plugin</url>
   </scm>

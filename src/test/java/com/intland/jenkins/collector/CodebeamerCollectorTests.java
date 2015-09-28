@@ -117,6 +117,10 @@ class DummyChangelog extends ChangeLogSet {
             public Object next() {
                 return entries[i++];
             }
+
+            @Override
+            public void remove() {
+            }
         };
     }
 }

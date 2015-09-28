@@ -27,7 +27,7 @@
 
   <artifactId>codebeamer-result-trend-updater</artifactId>
   <packaging>hpi</packaging>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>Codebeamer result trend updater</name>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Codebeamer+Result+Trend+Updater+Plugin</url>
 

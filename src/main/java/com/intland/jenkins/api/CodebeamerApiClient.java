@@ -30,6 +30,28 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 
 public class CodebeamerApiClient {
     private final int HTTP_TIMEOUT = 10000;
@@ -45,11 +67,27 @@ public class CodebeamerApiClient {
         baseUrl = url;
 
         CredentialsProvider provider = getCredentialsProvider(username, password);
-        client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
         requestConfig = RequestConfig.custom().setConnectionRequestTimeout(HTTP_TIMEOUT)
                                                 .setConnectTimeout(HTTP_TIMEOUT)
                                                 .setSocketTimeout(HTTP_TIMEOUT)
                                                 .build();
+
+        SSLContextBuilder builder = new SSLContextBuilder();
+        try {
+            builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+            SSLConnectionSocketFactory sslsf;
+            sslsf = new SSLConnectionSocketFactory(builder.build(),SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            HttpClientBuilder hcb = HttpClientBuilder.create();
+            hcb.setDefaultCredentialsProvider(provider);
+            hcb.setSSLSocketFactory(sslsf);
+            client = hcb.build();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createOrUpdateAttachment(String attachmentName, String newAttachmentContent) throws IOException {
